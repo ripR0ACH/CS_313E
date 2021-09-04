@@ -39,7 +39,7 @@ def longest_subsequence(s1, s2):
         # return the longest substring that could be in s2
         e -= 1
         sub = s1[s:e]
-        if sub in s1 and sub in s2 and len(sub) != 1:
+        if sub in s1 and sub in s2 and len(sub) != 1 and sub not in sequences:
             # if the substring from s1 is found within both s1 and s2 and is longer than 1 character, it is added to the longest_sequences list
             sequences.append(sub)
         s1 = s1[s+1:]
@@ -53,13 +53,17 @@ def longest_subsequence(s1, s2):
         for longest in range(1, len(sequences)):
             if len(max) < len(sequences[longest]):
                 max = sequences[longest]
-        return max
+        list = max
+        for longest in range(1, len(sequences)):
+            if len(max) == len(sequences[longest]) and max != sequences[longest]:
+                list += "\n" + sequences[longest]
+        return list
+
 def main():
   # read the data
     n = int(sys.stdin.readline().rstrip())    
   # for each pair
     for pair in range(n):
-        print(longest_subsequence(sys.stdin.readline().rstrip(),
-              sys.stdin.readline().rstrip()), "\n")
+        print(longest_subsequence(sys.stdin.readline().rstrip(), sys.stdin.readline().rstrip()), end="\n\n")
 if __name__ == "__main__":
   main()
