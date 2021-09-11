@@ -1,20 +1,12 @@
+import sys  
 #  File: DNA.py
-
 #  Description: this program finds the longest sequence of matching letters in two separate DNA strands.
-
 #  Student Name: zachary morrison
-
 #  Student UT EID: zim225
-
 #  Course Name: CS 313E
-
 #  Unique Number: 52590
-
 #  Date Created: 08/30/2021
-
 #  Date Last Modified: 08/30/2021
-
-import sys
 
 # Input: s1 and s2 are two strings that represent strands of DNA
 # Output: returns a sorted list of substrings that are the longest 
