@@ -41,9 +41,10 @@ def rail_fence_encode(strng, key):
 #          rail fence algorithm
 def rail_fence_decode(strng, key):
     if key >= 2 and key <= len(strng):
-        grid = [["-" for j in range(len(strng))] for i in range(key)]
-        letter_count = 0
-    return pass  # placeholder for the actual return statement
+      grid = [["-" for j in range(len(strng))] for i in range(key)]
+      
+        
+    return ""  # placeholder for the actual return statement
 
 #  Input: strng is a string of characters
 #  Output: function converts all characters to lower case and then
