@@ -1,5 +1,5 @@
 #  File: MagicSquare.py
-#  Description: 
+#  Description: this script generates and validates a magic square. The general process is laid out in the comments below
 #  Student's Name: zachary morrison
 #  Student UT EID: zim225
 #  Course Name: CS 313E
