@@ -40,11 +40,26 @@ def rail_fence_encode(strng, key):
 #  Output: function returns a single string that is decoded with
 #          rail fence algorithm
 def rail_fence_decode(strng, key):
-    if key >= 2 and key <= len(strng):
-      grid = [["-" for j in range(len(strng))] for i in range(key)]
-      
-        
-    return ""  # placeholder for the actual return statement
+  letter_row = []
+  letter_placements = []
+  if key >= 2 and key <= len(strng):
+    grid = [["-" for j in range(len(strng))] for i in range(key)]
+    letter_count = 0
+    row = 0
+    letter_row.append(row)
+    letter_placements.append((row, letter_count))
+    dir = 1  # this will start the row at zero and go down each time
+    while letter_count < len(strng) - 1:
+        letter_count += 1
+        row += dir
+        letter_row.append(row)
+        letter_placements.append((row, letter_count))
+        if row == len(grid) - 1:
+          dir = -1
+        elif row == 0:
+          dir = 1
+    letter_row.sort()
+    return letter_placements # placeholder for the actual return statement
 
 #  Input: strng is a string of characters
 #  Output: function converts all characters to lower case and then
@@ -82,6 +97,8 @@ def vigenere_decode(strng, phrase):
 
 def main():
     li = rail_fence_encode("helloworld", 3)
+    print(li)
+    li = rail_fence_decode("holelwrdlo", 3)
     print(li)
   # read the plain text from stdin
 
