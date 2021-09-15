@@ -59,6 +59,8 @@ def rail_fence_decode(strng, key):
         elif row == 0:
           dir = 1
     letter_row.sort()
+    for num in letter_row:
+      if num == 
     return letter_placements # placeholder for the actual return statement
 
 #  Input: strng is a string of characters
