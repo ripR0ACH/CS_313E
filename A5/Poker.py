@@ -229,19 +229,29 @@ class Poker(object):
 
     def is_two_pair(self, hand):
         ranks = [i.rank for i in hand]
-        pair = None
+        pair1 = None
+        pair2 = None
         for i in ranks:
             if ranks.count(i) == 2:
-                pair = i
-        if pair == None:
+                pair1 = i
+        if pair1 == None:
             return 0, ''
-        while ranks.count(pair) > 0:
-            del ranks[ranks.index(pair)]
+        while ranks.count(pair1) > 0:
+            del ranks[ranks.index(pair1)]
+        for i in ranks:
+            if ranks.count(i) == 2:
+                pair2 = i
+        if pair2 == None:
+            return 0, ''
+        if pair1 < pair2:
+            temp = pair2
+            pair2 = pair1
+            pair1 = temp
         ranks = sorted(ranks, reverse=True)
 
-        points = 3 * 15 ** 5 + (pair) * 15 ** 4 + (pair) * 15 ** 3
-        points = points + (ranks[0]) * 15 ** 2 + (ranks[1]) * 15 ** 1
-        points = points + (ranks[2])
+        points = 3 * 15 ** 5 + (pair1) * 15 ** 4 + (pair1) * 15 ** 3
+        points = points + (pair2) * 15 ** 2 + (pair2) * 15 ** 1
+        points = points + (ranks[0])
 
         return points, 'Two Pair'
 
@@ -274,6 +284,7 @@ class Poker(object):
         points = points + (hand[4].rank)
 
         return points, 'High Card'
+    
     def play(self):
         players = []
         # sort the hands of each player and print
@@ -285,7 +296,7 @@ class Poker(object):
             for card in sorted_hand:
                 hand_str = hand_str + str(card) + ' '
             print('Player ' + str(i + 1) + ' : ' + hand_str)
-
+        print()
         # determine the type of each hand and print
         hand_type = []  # create a list to store type of hand
         hand_points = []  # create a list to store points for hand
@@ -337,6 +348,8 @@ class Poker(object):
                 hand_points.append(points)
                 continue
             points, type = self.is_high_card(players[player])
+            hand_type.append(type)
+            hand_points.append(points)
         
         # determine winner and print
         max = hand_points[0]
