@@ -73,7 +73,7 @@ class Point (object):
 # Input: p, q, r are Point objects
 # Output: compute the determinant and return the value
 def det (p, q, r):
-  return
+  return (p.x * q.y + q.x * r.y + r.x * p.y - p.y * q.x - q.y * r.x - r.y * p.x)
 
 # Input: sorted_points is a sorted list of Point objects
 # Output: computes the convex hull of a sorted list of Point objects
@@ -81,19 +81,43 @@ def det (p, q, r):
 #         extreme left point and going clockwise in order
 #         returns the convex hull
 def convex_hull (sorted_points):
-  return
+  upper_hull = [sorted_points[0], sorted_points[1]]
+  for i in range(2, len(sorted_points)):
+    upper_hull.append(sorted_points[i])
+    while len(upper_hull) >= 3 and det(upper_hull[-3], upper_hull[-2], upper_hull[-1]) > 0:
+      del upper_hull[-2]
+  lower_hull = [sorted_points[-1], sorted_points[-2]]
+  for i in range(len(sorted_points) - 3, 1, -1):
+    lower_hull.append(sorted_points[i])
+    while len(lower_hull) >= 3 and det(lower_hull[-3], lower_hull[-2], lower_hull[-1]) > 0:
+      del lower_hull[-2]
+  lower_hull = lower_hull[1:len(lower_hull) - 1]
+  return upper_hull + lower_hull
+
+def det_list(pts = []):
+  det = 0
+  if len(pts) > 0:
+    for i in range(len(pts)):
+      if i < len(pts) - 1:
+        det += pts[i].x * pts[i + 1].y
+      elif i == len(pts) - 1:
+        det += pts[i].x * pts[0].y
+    for i in range(len(pts)):
+      if i < len(pts) - 1:
+        det -= pts[i].y * pts[i + 1].x
+      elif i == len(pts) - 1:
+        det -= pts[i].y * pts[0].x
+  return det
 
 # Input: convex_poly is  a list of Point objects that define the
 #        vertices of a convex polygon in order
 # Output: computes and returns the area of a convex polygon
 def area_poly (convex_poly):
-  return
+  return abs(det_list(convex_poly)) / 2
 
 # Input: no input
 # Output: a string denoting all test cases have passed
 def test_cases():
-  # write your own test cases
-
   return "all test cases passed"
 
 def main():
@@ -117,23 +141,18 @@ def main():
   # sort the list according to x-coordinates
   sorted_points = sorted (points_list)
 
-  '''
   # print the sorted list of Point objects
-  for p in sorted_points:
-    print (str(p))
-  '''
-
   # get the convex hull
-
+  hull = convex_hull(sorted_points)
   # run your test cases
-
+  print("Convex Hull")
   # print your results to standard output
-
   # print the convex hull
-
+  for i in hull:
+    print(i)
   # get the area of the convex hull
-
   # print the area of the convex hull
+  print("\n" + "Area of Convex Hull = " + str(area_poly(hull)))
 
 if __name__ == "__main__":
   main()
