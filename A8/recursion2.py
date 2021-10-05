@@ -1,5 +1,5 @@
 #  File: recursion2.py 
-#  Description: 
+#  Description: practicing different recursion methods and their applications
 #  Student Name: zachary morrison
 #  Student UT EID: zim225
 #  Course Name: CS 313E
@@ -19,10 +19,13 @@
 # whole array simply by passing start as 0. No loops are needed -- 
 # the recursive calls progress down the array. 
 def groupSum(start, nums, target):
+    # make sure that the start is within the bounds of nums
     if start >= len(nums):
         return target == 0
+    # recursively decrease the value of sum to using the nums[start] value
     if groupSum(start + 1, nums, target - nums[start]):
         return True
+    # pass over the current value of nums[start] to try the other trees
     if groupSum(start + 1, nums, target):
         return True
     return False
@@ -36,13 +39,14 @@ def groupSum(start, nums, target):
 # sums to the given target? However, with the additional constraint 
 # that all 6's must be chosen. (No loops needed.)
 def groupSum6(start, nums, target):
+    # make sure that the start is within the bounds of nums
     if start >= len(nums):
         return target == 0
-    if groupSum(start + 1, nums, target) and nums[start] != 6:
-        print(nums[start], "top\t\tstart:", start)
-        return True
-    if groupSum6(start + 1, nums, target - nums[start]):
-        print(nums[start], "bottom\tstart:", start)
+    # see if nums[start] equals 6, and decrement the value to decrease target
+    if nums[start] == 6:
+        return groupSum6(start + 1, nums, target - nums[start])
+    # otherwise try the normal 
+    if groupSum6(start + 1, nums, target - nums[start]) or groupSum6(start + 1, nums, target):
         return True
     return False
 
@@ -53,8 +57,12 @@ def groupSum6(start, nums, target):
 # additional constraint: If a value in the array is chosen to be in 
 # the group, the value immediately following it in the array must 
 # not be chosen. (No loops needed.) 
-#def groupNoAdj(start, nums, target):
-
+def groupNoAdj(start, nums, target):
+    if start >= len(nums):
+        return target == 0
+    if groupNoAdj(start + 2, nums, target - nums[start]) or groupNoAdj(start + 1, nums, target):
+        return True
+    return False
 
 
 # Given an array of ints, is it possible to choose a group 
@@ -63,9 +71,17 @@ def groupSum6(start, nums, target):
 # 5 in the array must be included in the group. If the value 
 # immediately following a multiple of 5 is 1, it must not 
 # be chosen. (No loops needed.)
-#def groupSum5(start, nums, target):
-  
-  
+def groupSum5(start, nums, target):
+    if start >= len(nums):
+        return target == 0
+    if nums[start] % 5 == 0 and start + 1 < len(nums):
+        if nums[start + 1] != 1:
+            return groupSum5(start + 1, nums, target - nums[start])
+        else:
+            return groupSum5(start + 2, nums, target - nums[start])
+    if groupSum5(start + 1, nums, target - nums[start]) or groupSum5(start + 1, nums, target):
+        return True
+    return False
   
 # Given an array of ints, is it possible to choose a 
 # group of some of the ints, such that the group sums 
@@ -76,9 +92,20 @@ def groupSum6(start, nums, target):
 # [1, 2, 2, 2, 5, 2], either all three 2's in the middle 
 # must be chosen or not, all as a group. (one loop can 
 # be used to find the extent of the identical values). 
-#def groupSumClump(start, nums, target):
-  
-  
+def groupSumClump(start, nums, target):
+    if start >= len(nums):
+        return target == 0
+    if start + 1 < len(nums) and nums[start] == nums[start + 1]:
+        repeated = nums[start]
+        sum_repeat = 0
+        while start < len(nums) and nums[start] == repeated:
+            sum_repeat += nums[start]
+            start += 1
+        return groupSumClump(start, nums, target - sum_repeat) or groupSumClump(start, nums, target)
+    if groupSumClump(start + 1, nums, target - nums[start]) or groupSumClump(start + 1, nums, target):
+        return True
+    return False
+        
 
 # Given an array of ints, is it possible to divide the 
 # ints into two groups, so that the sums of the two 
@@ -87,10 +114,10 @@ def groupSum6(start, nums, target):
 # takes whatever arguments you like, and make the 
 # initial call to your recursive helper from splitArray(). 
 # (No loops needed.)
-#def splitArray(nums):
+# def splitArray(nums):
 
+# def splitArrayHelper():
 
-#def splitArrayHelper():
 
 	
 	
