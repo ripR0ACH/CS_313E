@@ -28,6 +28,7 @@ def groupSum(start, nums, target):
     # pass over the current value of nums[start] to try the other trees
     if groupSum(start + 1, nums, target):
         return True
+    # return false if the sum does not add up to the target
     return False
         
     
@@ -58,8 +59,11 @@ def groupSum6(start, nums, target):
 # the group, the value immediately following it in the array must 
 # not be chosen. (No loops needed.) 
 def groupNoAdj(start, nums, target):
+    # make sure that the start is within the bounds of nums
     if start >= len(nums):
         return target == 0
+    # runs the normal sum algorithm, but in the first variation it adds 2 to the index to skip over
+    # the directly adjacent number
     if groupNoAdj(start + 2, nums, target - nums[start]) or groupNoAdj(start + 1, nums, target):
         return True
     return False
@@ -72,15 +76,23 @@ def groupNoAdj(start, nums, target):
 # immediately following a multiple of 5 is 1, it must not 
 # be chosen. (No loops needed.)
 def groupSum5(start, nums, target):
+    # make sure that the start is within the bounds of nums
     if start >= len(nums):
         return target == 0
+    # checks if the number that it's currently on is divisible by 5 and that the next value isn't outside the range
+    # of the nums list
     if nums[start] % 5 == 0 and start + 1 < len(nums):
+        # makes sure that the adjacent number beside the multiple of 5
+        # isn't a one
         if nums[start + 1] != 1:
             return groupSum5(start + 1, nums, target - nums[start])
+        # if it is a one, it skips it and uses the next number
         else:
             return groupSum5(start + 2, nums, target - nums[start])
+    # this if statement runs the regular sum algorithm that was used in the previous sum problems
     if groupSum5(start + 1, nums, target - nums[start]) or groupSum5(start + 1, nums, target):
         return True
+    # if none of the conditions above passed, return False
     return False
   
 # Given an array of ints, is it possible to choose a 
@@ -93,17 +105,30 @@ def groupSum5(start, nums, target):
 # must be chosen or not, all as a group. (one loop can 
 # be used to find the extent of the identical values). 
 def groupSumClump(start, nums, target):
+    # make sure that the start is within the bounds of nums
     if start >= len(nums):
         return target == 0
+    # check that the number after the start is within the bounds of the function
+    # and that the next number is the same as the first
     if start + 1 < len(nums) and nums[start] == nums[start + 1]:
+        # save the number that needs to be repeated to a variable
         repeated = nums[start]
+        # this variable is to contain the sum of the repeated number
         sum_repeat = 0
+        # this loop will continue until it reaches the end of the list
+        # nums or until the number that it's on doesn't match the number that should be repeated
         while start < len(nums) and nums[start] == repeated:
             sum_repeat += nums[start]
             start += 1
+        # it then starts two new brances of recursion: one that subtracts the sum of the repeated number
+        # from the target and tries to see if it can find a True path; one that continues trying to find
+        # the sum but skips the repeating numbers
         return groupSumClump(start, nums, target - sum_repeat) or groupSumClump(start, nums, target)
+    # it also tries the original sum algorithm at the end to add any numbers
+    # that don't fit into the conditions outlined above
     if groupSumClump(start + 1, nums, target - nums[start]) or groupSumClump(start + 1, nums, target):
         return True
+    # if none of the above blocks evaluates to True, return False
     return False
         
 
@@ -114,13 +139,35 @@ def groupSumClump(start, nums, target):
 # takes whatever arguments you like, and make the 
 # initial call to your recursive helper from splitArray(). 
 # (No loops needed.)
-# def splitArray(nums):
+def splitArray(nums):
+    # can the summation of the list of nums be evenly divided into two
+    if sum(nums) % 2 != 0:
+        # if not, return False without running recursive algorithm
+        return False
+    # otherwise return the helper function
+    return splitArrayHelper(nums, len(nums), 0, 0, 0)
+# Input: the helper function takes in the array of nums, the length
+#        of the array, the starting point of the recursion, the first sum
+#        being calculated, and the second sum being calculated
+# Output: outputs whether or not the array can be evenly divided into
+#         two arrays that have an equal sum of their items
+def splitArrayHelper(nums, length, start, sum1, sum2):
+    # checks if the starting value is at the end of the array of nums
+    if start == length:
+        # if it is at the end of nums, it returns True if the sums are the same,
+        # otherwise it returns False
+        return sum1 == sum2
+    # the recursion pursues two separate branches:
+    # - the first branch adds one to the starting value
+    #   and adds the value nums[start] (the current value
+    #   of the nums array) to sum1
+    # - the second branch adds one to the starting value
+    #   and adds the value nums[start] to sum2
+    # this recursion method will check all the different variations
+    # of summing the numbers to find if there is a variation where
+    # the sums, sum1 and sum2, can be equal
+    return splitArrayHelper(nums, length, start + 1, sum1 + nums[start], sum2) or splitArrayHelper(nums, length, start + 1, sum1, sum2 + nums[start])
 
-# def splitArrayHelper():
-
-
-	
-	
 # Given an array of ints, is it possible to divide the 
 # ints into two groups, so that the sum of one group
 # is a multiple of 10, and the sum of the other group 
@@ -128,10 +175,29 @@ def groupSumClump(start, nums, target):
 # Write a recursive helper method that takes whatever 
 # arguments you like, and make the initial call to your 
 # recursive helper from splitOdd10(). (No loops needed.)
-#def splitOdd10(nums):
-
-  
-#def splitOdd10Helper():
+def splitOdd10(nums):
+    # checks if the sum of the nums % 10 is even
+    # meaning that it reduces the sum of the nums to 
+    # be only the value in the ones-place
+    if (sum(nums) % 10) % 2 == 0:
+        # it returns false if the number is False
+        # because it directly contradicts the purpose
+        # of the function
+        return False
+    # oddly enough, I found that this problem can be solved without even using
+    # the recursion. It output the exact same results when I just put "return False"
+    # on the line below instead of the recursive algorithm
+    return splitOdd10Helper(nums, len(nums), 0, 0, 0)
+def splitOdd10Helper(nums, length, start, sum1, sum2):
+    # checks if the starting value is at the end of the array of nums
+    if start == length:
+        # if it is at the end of nums, it returns True 
+        # if the first sum / 10 has no remainder and the
+        # second sum is odd.
+        # otherwise it returns False
+        return sum1 % 10 == 0 and sum2 % 2 != 0
+    # the recursion is the same as in the problem before
+    return splitOdd10Helper(nums, length, start + 1, sum1 + nums[start], sum2) or splitOdd10Helper(nums, length, start + 1, sum1, sum2  + nums[start])
 
 
   
@@ -141,11 +207,29 @@ def groupSumClump(start, nums, target):
 # multiple of 5 must be in one group, and all the values 
 # that are a multiple of 3 (and not a multiple of 5) 
 # must be in the other. (No loops needed.) 
-#def split53(nums):
-
-#def split53Helper():
-
-
+def split53(nums):
+    # this function just returns the value of the helper function
+    return split53Helper(nums, len(nums), 0, 0, 0)
+def split53Helper(nums, length, start, sum1, sum2):
+    # checks if the starting value is at the end of the array of nums
+    if start == length:
+        # if it is at the end of nums, it returns True if the sums are the same,
+        # otherwise it returns False
+        return sum1 == sum2
+    # checks if the current number is divisible by 5
+    if nums[start] % 5 == 0:
+        # if it is, it adds the value to sum1
+        sum1 += nums[start]
+    # else, it checks if the current number is divisible by 3
+    elif nums[start] % 3 == 0:
+        # if it is, it adds the value to sum2
+        sum2 += nums[start]
+    else:
+        # otherwise, it runs the same recusion as the problems above
+        return split53Helper(nums, length, start + 1, sum1 + nums[start], sum2) or split53Helper(nums, length, start + 1, sum1, sum2 + nums[start])
+    # and if all the conditional blocks above fail,
+    # it moves forward one number in the array and tries again
+    return split53Helper(nums, length, start + 1, sum1, sum2)
 
 
 #######################################################################################################
