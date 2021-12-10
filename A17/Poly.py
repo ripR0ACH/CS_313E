@@ -7,6 +7,7 @@
 #  Date Created: 11/08/2021
 #  Date Last Modified: 11/08/2021
 import sys
+from typing import final
 
 class Link (object):
     def __init__ (self, coeff = 1, exp = 1, next = None):
@@ -25,22 +26,57 @@ class LinkedList (object):
         if self.first == None:
             self.first = Link(coeff, exp)
         else:
-            if self.first.next == None and self.first.exp > exp:
-                self.first.next = Link(coeff, exp)
-
+            current = self.first
+            if current.next == None and exp < current.exp:
+                current.next = Link(coeff, exp)
+                return
+            while current.next != None:
+                if exp < current.exp and exp > current.next.exp:
+                    current.next = Link(coeff, exp, current.next)
+                    return
+                elif exp == current.exp:
+                    c = coeff + current.coeff
+                    print('here', c)
+                    current = Link(c, exp, current.next)
+                    return c
+                current = current.next
+            if exp < current.exp:
+                current.next = Link(coeff, exp)
+                return
+            elif exp > current.exp:
+                tmp = current
+                current = Link(coeff, exp, tmp)
+                return
+            else:
+                c = coeff + current.coeff
+                current = Link(c, exp, current.next)
+                return
+            
     # add polynomial p to this poly nomial and return the sum
     def add (self, p):
-        pass
+        final_poly = LinkedList()
+        current = self.first
+        while current != None:
+            final_poly.insert_in_order(current.coeff, current.exp)
+            current = current.next
+        current = p.first
+        while current != None:
+            final_poly.insert_in_order(current.coeff, current.exp)
+            current = current.next
+        return final_poly
     # multiply polynomial p to this polynomial and return the product
     def mult (self, p):
         pass
     # create a string representation of the polynomial
     def __str__ (self):
         s = ''
+        if self.first == None:
+            return s
         current = self.first
-        while current != None:
-            s += str(current) + " "
+        while current.next != None:
+            s += str(current) + " + "
             current = current.next
+        s += str(current)
         return s
         
 
@@ -54,8 +90,9 @@ def main():
             list.insert_in_order(int(line[0]), int(line[1]))
         sys.stdin.readline()
         print(list)
-    print(lists[0].add(lists[1]))
-    print(lists[0])
+    l = LinkedList()
+    print(l.insert_in_order(lists[1].first.coeff, lists[1].first.exp))
+    print(lists[0].add(l))
 
   # create polynomial p
 

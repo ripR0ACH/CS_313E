@@ -7,6 +7,8 @@
 #  Date Created: 10/29/2021
 #  Date Last Modified: 11/01/2021
 
+import sys
+
 class Queue(object):
     def __init__(self, q = []):
         self.queue = q
@@ -23,10 +25,10 @@ class Queue(object):
         s = s[:-2] + ']'
         return s
 
-def sort_digit(arr, digit):
-	n = len(arr)
+def main():
+    for line in sys.stdin:
+        line = line.strip()
+        word_list.append(line)
 
-	# this array will contain the sorted list
-	out = [Queue()] * n
-	
-	digit = [Queue()] * 36
+if __name__ == "__main__":
+  main()
