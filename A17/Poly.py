@@ -24,9 +24,16 @@ class LinkedList (object):
     def insert_in_order (self, coeff, exp):
         if self.first == None:
             self.first = Link(coeff, exp)
+            return
         else:
             if self.first.next == None and self.first.exp > exp:
                 self.first.next = Link(coeff, exp)
+                return
+            elif self.first.next == None and self.first.exp < exp:
+                self.first.next = Link(coeff, exp)
+                return
+            elif self.first.next == None and self.first.exp == exp:
+                        
 
     # add polynomial p to this poly nomial and return the sum
     def add (self, p):
